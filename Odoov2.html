@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP Project Estimator</title>
+
+<style>
+:root {
+    --primary: #7c3aed;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Layout */
+.app {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    min-height: 100vh;
+}
+
+/* LEFT */
+.modules {
+    padding: 32px;
+}
+
+.modules h1 { margin-bottom: 6px; }
+.modules p { color: var(--muted); margin-bottom: 24px; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+/* Module Card */
+.card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+.card:hover { transform: translateY(-3px); }
+
+.card.active {
+    border-color: var(--primary);
+    background: #f5f3ff;
+}
+
+.card input { display: none; }
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+}
+
+.card span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* RIGHT (DESKTOP) */
+.sidebar {
+    background: #0f172a;
+    color: #fff;
+    padding: 26px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 { margin-top: 0; }
+
+.metric {
+    margin-bottom: 18px;
+}
+
+.metric label {
+    font-size: 12px;
+    color: #c7d2fe;
+}
+
+.metric .value {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 18px 0;
+}
+
+.selected {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.selected ul {
+    padding-left: 18px;
+    font-size: 14px;
+}
+
+.footer-note {
+    font-size: 12px;
+    color: #cbd5f5;
+    margin-top: 16px;
+}
+
+/* ===== MOBILE STICKY ESTIMATOR (UI ONLY) ===== */
+.mobile-estimator {
+    display: none;
+}
+
+@media (max-width: 900px) {
+
+    .app {
+        grid-template-columns: 1fr;
+        padding-bottom: 120px;
+    }
+
+    /* Hide desktop sidebar only on mobile */
+    .sidebar {
+        display: none;
+    }
+
+    .mobile-estimator {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #0f172a;
+        color: #fff;
+        padding: 14px 16px;
+        z-index: 999;
+        box-shadow: 0 -6px 20px rgba(0,0,0,0.35);
+    }
+
+    .mobile-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile-row strong {
+        font-size: 18px;
+    }
+
+    .mobile-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .mobile-actions a {
+        flex: 1;
+        background: #22c55e;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="modules">
+<h1>ERP Project Estimator</h1>
+<p>Select modules for a quick implementation estimate.</p>
+
+<div class="grid">
+
+<!-- Core -->
+<label class="card"><input type="checkbox" data-name="Base Setup" data-cost="36000" data-hours="24"><h3>Base Setup</h3><span>Company master, system configuration, roles, users, permissions</span></label>
+<label class="card"><input type="checkbox" data-name="Multi-Company" data-cost="24000" data-hours="16"><h3>Multi-Company</h3><span>Multiple legal entities with separate books and shared masters, Inter-company setup</span></label>
+
+<!-- Sales -->
+<label class="card"><input type="checkbox" data-name="CRM" data-cost="36000" data-hours="24"><h3>CRM</h3><span>Leads, opportunities, sales pipeline stages, follow-ups, calls, meetings, reminders</span></label>
+<label class="card"><input type="checkbox" data-name="Sales" data-cost="48000" data-hours="32"><h3>Sales</h3><span>Quotations, sales orders, pricing, discounts, approvals, invoicing</span></label>
+<label class="card"><input type="checkbox" data-name="POS" data-cost="36000" data-hours="24"><h3>POS</h3><span>Retail billing, GST, payments, shift closing, daily sales</span></label>
+<label class="card"><input type="checkbox" data-name="Subscriptions" data-cost="36000" data-hours="24"><h3>Subscriptions</h3><span>Plans, renewals, recurring invoices, auto billing</span></label>
+
+<!-- Purchase & Inventory -->
+<label class="card"><input type="checkbox" data-name="Purchase" data-cost="48000" data-hours="32"><h3>Purchase</h3><span>RFQs, supplier comparison, purchase orders, vendor bills</span></label>
+<label class="card"><input type="checkbox" data-name="Inventory" data-cost="60000" data-hours="40"><h3>Inventory</h3><span>Stock in/out, transfers, batches/serials, barcode scanning</span></label>
+
+<!-- Finance -->
+<label class="card"><input type="checkbox" data-name="Accounting" data-cost="72000" data-hours="48"><h3>Accounting</h3><span>GL, AR/AP, GST, bank, financial reports</span></label>
+<label class="card"><input type="checkbox" data-name="Expenses" data-cost="24000" data-hours="16"><h3>Expenses</h3><span>Employee expenses, Expense claims, approvals, reimbursements</span></label>
+<label class="card"><input type="checkbox" data-name="Assets" data-cost="24000" data-hours="16"><h3>Assets</h3><span>Asset register, depreciation, transfers, disposal</span></label>
+
+<!-- Manufacturing -->
+<label class="card"><input type="checkbox" data-name="Manufacturing" data-cost="84000" data-hours="56"><h3>Manufacturing</h3><span>BOMs, Production Plan, work orders, material consumption, costing</span></label>
+<label class="card"><input type="checkbox" data-name="Quality" data-cost="24000" data-hours="16"><h3>Quality</h3><span>Inspections, QC points, rejections</span></label>
+<label class="card"><input type="checkbox" data-name="Maintenance" data-cost="24000" data-hours="16"><h3>Maintenance</h3><span>Preventive & breakdown maintenance, logs</span></label>
+
+<!-- HR -->
+<label class="card"><input type="checkbox" data-name="Employees" data-cost="36000" data-hours="24"><h3>Employees</h3><span>Employee master, roles, documentsr</span></label>
+<label class="card"><input type="checkbox" data-name="Attendance" data-cost="24000" data-hours="16"><h3>Attendance</h3><span>Shifts, biometric integration, overtime</span></label>
+<label class="card"><input type="checkbox" data-name="Payroll" data-cost="60000" data-hours="40"><h3>Payroll</h3><span>Salary structures, payroll runs, payslips</span></label>
+
+<!-- Projects & Services -->
+<label class="card"><input type="checkbox" data-name="Projects" data-cost="36000" data-hours="24"><h3>Projects</h3><span>Projects, tasks, timesheets, costing</span></label>
+<label class="card"><input type="checkbox" data-name="Helpdesk" data-cost="36000" data-hours="24"><h3>Helpdesk</h3><span>Tickets, priorities, SLA, escalations</span></label>
+
+<!-- Website -->
+<label class="card"><input type="checkbox" data-name="Website" data-cost="48000" data-hours="32"><h3>Website</h3><span>Pages, forms, content management</span></label>
+<label class="card"><input type="checkbox" data-name="eCommerce" data-cost="60000" data-hours="40"><h3>eCommerce</h3><span>Products, online orders, payments, stock sync</span></label>
+
+</div>
+</div>
+
+<!-- DESKTOP SIDEBAR -->
+<aside class="sidebar">
+<h2>Estimate</h2>
+
+<div class="metric">
+<label>Total Cost</label>
+<div class="value">₹ <span id="totalCost">0</span></div>
+</div>
+
+<div class="metric">
+<label>Total Effort</label>
+<div class="value"><span id="totalHours">0</span> hrs</div>
+</div>
+
+<div class="footer-note">
+Assumption: Standard Odoo setup + configuration + basic training
+</div>
+
+<div class="divider"></div>
+
+<div class="selected">
+<h4>Selected Modules</h4>
+<ul id="selectedList"></ul>
+</div>
+
+<a class="contact-btn"
+   href="https://wa.me/918378092838"
+   target="_blank"
+   style="color:#fff;">
+   Contact Us on WhatsApp
+</a>
+
+<div class="footer-note">
+Indicative estimate for standard ERP implementation.
+</div>
+</aside>
+
+</div>
+
+<!-- MOBILE STICKY ESTIMATOR -->
+<div class="mobile-estimator">
+    <div class="mobile-row">
+        <div>₹ <strong id="mTotalCost">0</strong></div>
+        <div><strong id="mTotalHours">0</strong> hrs</div>
+    </div>
+<div class="footer-note">
+Assumption: Standard Odoo setup + configuration + basic training
+</div>
+    <div class="mobile-actions">
+        <a href="https://wa.me/918378092838" target="_blank">
+            Contact on WhatsApp
+        </a>
+    </div>
+</div>
+
+<script>
+const cards = document.querySelectorAll(".card");
+
+cards.forEach(card => {
+    card.addEventListener("click", () => {
+        const cb = card.querySelector("input");
+        cb.checked = !cb.checked;
+        card.classList.toggle("active", cb.checked);
+        calculate();
+    });
+});
+
+function calculate() {
+    let cost = 0, hours = 0;
+    const list = document.getElementById("selectedList");
+    list.innerHTML = "";
+
+    document.querySelectorAll("input:checked").forEach(cb => {
+        cost += Number(cb.dataset.cost);
+        hours += Number(cb.dataset.hours);
+
+        const li = document.createElement("li");
+        li.textContent = cb.dataset.name;
+        list.appendChild(li);
+    });
+
+    document.getElementById("totalCost").innerText =
+        cost.toLocaleString("en-IN");
+    document.getElementById("totalHours").innerText = hours;
+
+    /* Mobile mirror (UI only) */
+    document.getElementById("mTotalCost").innerText =
+        cost.toLocaleString("en-IN");
+    document.getElementById("mTotalHours").innerText = hours;
+}
+</script>
+
+</body>
+</html>
